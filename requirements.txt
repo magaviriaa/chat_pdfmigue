@@ -1,11 +1,12 @@
 langchain==0.0.154
 PyPDF2==3.0.1
 python-dotenv==1.0.0
-streamlit==1.18.1
+streamlit==1.33.0
 faiss-cpu==1.12.0
 streamlit-extras
 openai==0.28
 tiktoken
 altair==4.2.0
 streamlit-lottie
-imghdr-py==0.4.1
+pandas>=2.0.0
+numpy>=1.24.0
