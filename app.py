@@ -9,43 +9,45 @@ from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 import platform
 
-# App title and presentation
-st.title('Generación Aumentada por Recuperación (RAG) 💬')
+# 🎤 Taylor's Version: título y presentación
+st.title("📖 Taylor's RAG — Read & Analyze (Taylor’s Version)")
 st.write("Versión de Python:", platform.python_version())
 
-# Load and display image
+# Imagen (puedes mantener la original o poner una temática)
 try:
     image = Image.open('Chat_pdf.png')
     st.image(image, width=350)
 except Exception as e:
     st.warning(f"No se pudo cargar la imagen: {e}")
 
-# Sidebar information
+# Sidebar
 with st.sidebar:
-    st.subheader("Este Agente te ayudará a realizar análisis sobre el PDF cargado")
+    st.subheader("✨ Taylor te ayuda a leer entre líneas")
+    st.write("Imagina que estás revisando letras inéditas, notas de estudio o contratos de tu era favorita. "
+             "Esta app convierte cualquier PDF en una charla con Taylor para entenderlo mejor.")
 
-# Get API key from user
-ke = st.text_input('Ingresa tu Clave de OpenAI', type="password")
+# Clave de API
+ke = st.text_input('🔑 Ingresa tu clave de OpenAI', type="password")
 if ke:
     os.environ['OPENAI_API_KEY'] = ke
 else:
     st.warning("Por favor ingresa tu clave de API de OpenAI para continuar")
 
-# PDF uploader
-pdf = st.file_uploader("Carga el archivo PDF", type="pdf")
+# Subida de PDF
+pdf = st.file_uploader("📂 Sube el archivo PDF (por ejemplo, letras, notas o documentos de estudio)", type="pdf")
 
-# Process the PDF if uploaded
+# Procesamiento
 if pdf is not None and ke:
     try:
-        # Extract text from PDF
+        # Extraer texto
         pdf_reader = PdfReader(pdf)
         text = ""
         for page in pdf_reader.pages:
             text += page.extract_text()
         
-        st.info(f"Texto extraído: {len(text)} caracteres")
+        st.info(f"📄 Texto extraído: {len(text)} caracteres (una nueva Era detectada)")
         
-        # Split text into chunks
+        # Dividir texto
         text_splitter = CharacterTextSplitter(
             separator="\n",
             chunk_size=500,
@@ -53,40 +55,37 @@ if pdf is not None and ke:
             length_function=len
         )
         chunks = text_splitter.split_text(text)
-        st.success(f"Documento dividido en {len(chunks)} fragmentos")
-        
-        # Create embeddings and knowledge base
+        st.success(f"🧩 Documento dividido en {len(chunks)} fragmentos listos para analizar")
+
+        # Crear embeddings y base de conocimiento
         embeddings = OpenAIEmbeddings()
         knowledge_base = FAISS.from_texts(chunks, embeddings)
         
-        # User question interface
-        st.subheader("Escribe qué quieres saber sobre el documento")
-        user_question = st.text_area(" ", placeholder="Escribe tu pregunta aquí...")
+        # Interfaz de preguntas
+        st.subheader("💬 Pregúntale a Taylor sobre el documento")
+        user_question = st.text_area(" ", placeholder="Por ejemplo: ¿De qué trata esta sección? o ¿Cuál es el tono emocional del texto?")
         
-        # Process question when submitted
+        # Cuando el usuario pregunta
         if user_question:
             docs = knowledge_base.similarity_search(user_question)
             
-            # Use a current model instead of deprecated text-davinci-003
-            # Options: "gpt-3.5-turbo-instruct" or "gpt-4-turbo-preview" depending on your API access
+            # Modelo actual
             llm = OpenAI(temperature=0, model_name="gpt-4o")
-            
-            # Load QA chain
             chain = load_qa_chain(llm, chain_type="stuff")
             
-            # Run the chain
             response = chain.run(input_documents=docs, question=user_question)
             
-            # Display the response
-            st.markdown("### Respuesta:")
+            # Mostrar respuesta
+            st.markdown("### 💡 Respuesta (Taylor’s Insight):")
             st.markdown(response)
+            st.caption("*(Basado en las letras, notas o PDFs que has compartido con Taylor’s AI.)*")
                 
     except Exception as e:
         st.error(f"Error al procesar el PDF: {str(e)}")
-        # Add detailed error for debugging
         import traceback
         st.error(traceback.format_exc())
+
 elif pdf is not None and not ke:
     st.warning("Por favor ingresa tu clave de API de OpenAI para continuar")
 else:
-    st.info("Por favor carga un archivo PDF para comenzar")
+    st.info("💌 Carga un archivo PDF para que Taylor te ayude a interpretarlo.")
