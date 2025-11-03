@@ -15,7 +15,7 @@ st.write("Versión de Python:", platform.python_version())
 
 # Imagen (puedes mantener la original o poner una temática)
 try:
-    image = Image.open('Chat_pdf.png')
+    image = Image.open('Chat_pdf.jpg')
     st.image(image, width=350)
 except Exception as e:
     st.warning(f"No se pudo cargar la imagen: {e}")
