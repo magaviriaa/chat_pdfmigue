@@ -1,13 +1,23 @@
-
+# Framework principal
 streamlit==1.18.1
+
+# Librerías base del proyecto
 langchain==0.0.154
 openai==0.28
 tiktoken
+
+# PDF y utilidades
 PyPDF2==3.0.1
 python-dotenv==1.0.0
-faiss-cpu==1.12.0
+
+# Reemplazo de FAISS: vectorstore 100% Python
+chromadb==0.5.3
+
+# Visualización y extras
 altair==4.2.0
 streamlit-extras
 streamlit-lottie
+
+# Dependencias adicionales necesarias
 pandas>=1.5.3
 numpy>=1.24.3
