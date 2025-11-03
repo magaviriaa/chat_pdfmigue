@@ -4,7 +4,7 @@ from PIL import Image
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain.vectorstores import Chroma
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 import platform
@@ -59,7 +59,7 @@ if pdf is not None and ke:
 
         # Crear embeddings y base de conocimiento
         embeddings = OpenAIEmbeddings()
-        knowledge_base = FAISS.from_texts(chunks, embeddings)
+        knowledge_base = Chroma.from_texts(chunks, embeddings)
         
         # Interfaz de preguntas
         st.subheader("💬 Pregúntale a Taylor sobre el documento")
